@@ -37,9 +37,9 @@ class EmployeeControlller extends Controller
         return redirect()->back()->with('success', 'Employee successfully registered!');
     }
 
-    public function show(Employee $employee)
+    public function edit(Employee $employee)
     {
-        return view('employees.edit', ['employee' => $employee]);
+        return view('employees.edit', ['employee'=>$employee]);
     }
 
     public function update(Employee $employee, Request $request)
@@ -73,5 +73,12 @@ class EmployeeControlller extends Controller
     {
         $employee->password = Hash::make('12345678');
         return redirect()->back()->with('success', 'Employee password successfully reset!');
+    }
+
+    public function regenerateQrCode(Employee $employee)
+    {
+        $employee->qrcode = Employee::generateQrCode($employee->qrcode);
+        $employee->update();
+        return redirect()->back()->with('success', 'Employee successfully regenerated qrcode');
     }
 }

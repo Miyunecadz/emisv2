@@ -34,10 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::get('employees',[EmployeeControlller::class, 'index'])->name('employees.index');
     Route::get('employees/create', [EmployeeControlller::class, 'create'])->name('employees.create');
     Route::post('employees', [EmployeeControlller::class, 'store'])->name('employees.store');
-    Route::get('employees/{employee}', [EmployeeControlller::class, 'show'])->name('employees.show');
+    // Route::get('employees/{employee}', [EmployeeControlller::class, 'show'])->name('employees.show');
+    Route::get('employees/{employee}/edit', [EmployeeControlller::class, 'edit'])->name('employees.edit');
     Route::put('employees/{employee}', [EmployeeControlller::class, 'update'])->name('employees.update');
     Route::delete('employees/{employee}', [EmployeeControlller::class, 'destroy'])->name('employees.destroy');
     Route::put('employees/{employee}/reset', [EmployeeControlller::class, 'reset'])->name('employees.reset');
+    Route::put('employees/{employee}/generate', [EmployeeControlller::class, 'regenerateQrCode'])->name('employees.regenerate');
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
