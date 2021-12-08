@@ -5,14 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmployeeStoreRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 
 class EmployeeControlller extends Controller
 {
-    public function index()
+
+
+    public function index(Request $request)
     {
-        return view('employees.index', ['employees' => Employee::paginate()]);
+        return view('employees.index', ['employees' => Employee::when($request->keyword, function($query, $keyword){
+            $query->where('employeenumber','LIKE', '%'. $keyword .'%')
+            ->orwhere('firstname', 'LIKE', '%'.$keyword.'%')
+            ->orWhere('lastname', 'LIKE', '%'.$keyword.'%')
+            ->orWhereRaw("concat(firstname,' ',lastname)=?",$keyword)
+            ->orWhereRaw("concat(lastname,' ',firstname)=?",$keyword)
+            ->orWhere('username','LIKE', "%{$keyword}%")
+            ->orWhere('email','LIKE', "%{$keyword}%")
+            ->orWhere('position', $keyword);
+        })->paginate()]);
     }
 
     public function create()
@@ -39,19 +52,20 @@ class EmployeeControlller extends Controller
 
     public function edit(Employee $employee)
     {
-        return view('employees.edit', ['employee'=>$employee]);
+        return view('employees.edit', ['employee'=>$employee, 'positions' => Employee::validPositions(), 'qrcode' => Crypt::encrypt($employee->qrcode)]);
     }
 
     public function update(Employee $employee, Request $request)
     {
         $request->validate([
+            'employeenumber' => 'required|numeric',
             'firstname' => 'required',
             'lastname' => 'required',
-            'middlename' => 'required',
-            'email' => ['required', 'email', 'unique:employees'],
+            'email' => ['required', 'email'],
             'position' => 'required'
         ]);
 
+        $employee->employeenumber = $request->employeenumber;
         $employee->firstname = $request->firstname;
         $employee->lastname = $request->lastname;
         $employee->middlename = $request->middlename;

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.employeeapp')
 
 @section('content')
     <div class="card mb-4">
@@ -6,7 +6,7 @@
             {{ __('My profile') }}
         </div>
 
-        <form action="{{ route('profile.update') }}" method="POST">
+        <form action="{{ route('employee.profileUpdate') }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -20,20 +20,21 @@
                     <svg class="icon">
                       <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
                     </svg></span>
-                    <input class="form-control" type="text" name="firstname" placeholder="{{ __('Firstname') }}"
-                           value="{{ old('name', auth()->user()->firstname) }}" required>
+                    <input class="form-control" type="text" name="firstname" placeholder="{{ __('First Name') }}"
+                           value="{{ old('name', auth()->guard('employee')->user()->firstname) }}" required>
                     @error('firstname')
                     <span class="invalid-feedback">
                             {{ $message }}
                         </span>
                     @enderror
                 </div>
+
                 <div class="input-group mb-3"><span class="input-group-text">
                     <svg class="icon">
                       <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
                     </svg></span>
-                    <input class="form-control" type="text" name="lastname" placeholder="{{ __('Lastname') }}"
-                           value="{{ old('name', auth()->user()->lastname) }}" required>
+                    <input class="form-control" type="text" name="lastname" placeholder="{{ __('Last Name') }}"
+                           value="{{ old('name', auth()->guard('employee')->user()->lastname) }}" required>
                     @error('lastname')
                     <span class="invalid-feedback">
                             {{ $message }}
@@ -46,7 +47,7 @@
                       <use xlink:href="{{ asset('icons/coreui.svg#cil-envelope-open') }}"></use>
                     </svg></span>
                     <input class="form-control" type="text" name="email" placeholder="{{ __('Email') }}"
-                           value="{{ old('email', auth()->user()->email) }}" readonly>
+                           value="{{ old('email', auth()->guard('employee')->user()->email) }}" readonly>
                 </div>
 
                 <div class="input-group mb-3"><span class="input-group-text">

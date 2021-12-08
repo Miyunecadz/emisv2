@@ -10,9 +10,17 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('role', '<>', 'admin')->paginate();
+        $users = User::where('role', '<>', 'admin')->when($request->keyword, function($query, $keyword){
+            $query->where('firstname', 'LIKE', '%'.$keyword.'%')
+            ->orWhere('lastname', 'LIKE', '%'.$keyword.'%')
+            ->orWhereRaw("concat(firstname,' ',lastname)=?",$keyword)
+            ->orWhereRaw("concat(lastname,' ',firstname)=?",$keyword)
+            ->orWhere('username','LIKE', "%{$keyword}%")
+            ->orWhere('email','LIKE', "%{$keyword}%")
+            ->orWhere('role', $keyword);
+        })->paginate();
 
         return view('users.index', compact('users'));
     }

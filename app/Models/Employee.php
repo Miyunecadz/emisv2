@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use function PHPSTORM_META\map;
 
-class Employee extends Model
+class Employee extends Authenticatable
 {
     use HasFactory;
 
@@ -32,6 +33,11 @@ class Employee extends Model
         'jo' => 'Job Order'
     ];
 
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function prettyPosition()
     {
         return self::$positions[$this->position];
@@ -40,6 +46,11 @@ class Employee extends Model
     public function fullName()
     {
         return Str::title($this->firstname.' '.$this->lastname.' '.$this->suffix);
+    }
+
+    public static function validPositions()
+    {
+        return self::$positions;
     }
 
     public static function generateQrCode($qrcode=null)
@@ -54,6 +65,11 @@ class Employee extends Model
     public static function isExistingQrCode($qrcode)
     {
         return self::where('qrcode', $qrcode)->count() > 0;
+    }
+
+    public function getQrCode()
+    {
+        return Crypt::encrypt($this->qrcode);
     }
 
 }

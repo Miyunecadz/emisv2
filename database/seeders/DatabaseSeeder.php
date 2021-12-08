@@ -13,9 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory()->create([
-            'username' => 'admin',
-            'role' => 'admin'
+        $this->call ([
+            UserSeeder::class,
+            EmployeeSeeder::class,
+            AttendanceSeeder::class,
         ]);
+
+
     }
 }

@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\Auth\EmployeeAuthController;
 use App\Http\Controllers\EmployeeControlller;
+use App\Http\Controllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,16 +16,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return redirect(route('home'));
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::view('about', 'about')->name('about');
 
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
@@ -43,4 +43,28 @@ Route::middleware('auth')->group(function () {
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('attendances', [AttendanceController::class, 'index'])->name('attendances.index');
+    Route::post('attendance', [AttendanceController::class, 'scan'])->name('attedance.scan');
+    Route::delete('attendances/{attendance}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
 });
+
+
+Route::get('employee/login', [EmployeeAuthController::class, 'loginForm'])->name('employee.loginForm');
+Route::post('employee/login', [EmployeeAuthController::class, 'login'])->name('employee.login');
+
+Route::middleware('employee')->prefix('employee')->group(function(){
+    Route::get('dashboard', function(){
+        return view('user_employee.dashboard');
+    })->name('employee.dashboard');
+
+    Route::get('profile', [EmployeeProfileController::class, 'show'])->name('employee.profile');
+    Route::put('profile', [EmployeeProfileController::class, 'update'])->name('employee.profileUpdate');
+
+    Route::get('attendances', [AttendanceController::class, 'filterByLoginEmployee'])->name('employee.attendance');
+
+
+    Route::post('employee/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
+});
+
+

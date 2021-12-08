@@ -5,8 +5,8 @@
         <div class="card-group d-block d-md-flex row">
             <div class="card col-md-7 p-4 mb-0">
                 <div class="card-body">
-                    <h1>{{ __('Login') }}</h1>
-                    <form action="{{ route('login') }}" method="POST">
+                    <h2>{{ __('Employee Login Form') }}</h2>
+                    <form action="{{ route('employee.login') }}" method="POST">
                         @csrf
                         <div class="input-group mb-3"><span class="input-group-text">
                       <svg class="icon">

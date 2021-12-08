@@ -98,7 +98,6 @@
 
                     <select class="form-select" name="role" id="role">
                         <option value="" disabled selected>Please select</option>
-                        <option value="hrmo">HRMO</option>
                         <option value="incharge">In-charge Personel</option>
                     </select>
                     @error('role')

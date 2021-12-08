@@ -4,7 +4,14 @@
     <div class="">
         <h4>{{ __('Users') }}</h4>
     </div>
-    <div class="card mb-4">
+    <div class="card mb-4 row">
+
+        <div class="col-lg-5 mt-3">
+            <form action="{{ route('users.index') }}" method="get" class="d-flex gap-2">
+                <input type="text" name="keyword" id="keyword" class="form-control" placeholder="Keyword...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
 
         @if ($message = Session::get('success'))
             <div class="m-3">
@@ -31,7 +38,7 @@
                         <tr>
                             <td>{{ $user->fullName() }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->role }}</td>
+                            <td>{{ $user->prettyRole() }}</td>
                             <td class="d-flex ">
                                 <div class="m-1 p-1">
                                     <a class="text-warning" href="#" title="Edit">
@@ -76,4 +83,8 @@
             {{ $users->links() }}
         </div>
     </div>
+
+<script>
+
+</script>
 @endsection

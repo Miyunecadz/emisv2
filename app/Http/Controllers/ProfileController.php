@@ -19,8 +19,8 @@ class ProfileController extends Controller
         }
 
         auth()->user()->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
         ]);
 
         return redirect()->back()->with('success', 'Profile updated.');

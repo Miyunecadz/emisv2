@@ -27,6 +27,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    private static $roles = [
+        'admin' => 'Admin',
+        'incharge' => 'In-charge Personnel'
+    ];
+
     public static $ADMIN = 'admin';
     public static $HRMO = 'hrmo';
     public static $INCHARGE = 'incharge';
@@ -61,6 +66,11 @@ class User extends Authenticatable
         return in_array($role, self::$validRoles);
     }
 
+
+    public function prettyRole()
+    {
+        return self::$roles[$this->role];
+    }
 
     public function fullName()
     {

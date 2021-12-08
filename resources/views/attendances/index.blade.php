@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+
     <div class="">
         <h4>{{ __('Employees') }}</h4>
     </div>
@@ -14,37 +17,41 @@
             </div>
         @endif
 
-        <div class="col-lg-5 mt-3">
-            <form action="{{ route('employees.index') }}" method="get" class="d-flex gap-2">
-                <input type="text" name="keyword" id="keyword" class="form-control" placeholder="Keyword...">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
-        </div>
 
 
         <div class="card-body table-responsive">
 
-            <table class="table table-hover ">
+            <table id='dTable' class="table table-hover ">
                 <thead>
                 <tr>
                     <th scope="col">Employee Number</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Position</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                    @forelse ($employees as $employee)
+                    @forelse ($attendances as $attendance)
                         <tr>
-                            <td>{{ $employee->employeenumber }}</td>
-                            <td>{{ $employee->fullName() }}</td>
-                            <td>{{ $employee->email }}</td>
-                            <td>{{ $employee->username }}</td>
-                            <td>{{ $employee->prettyPosition() }}</td>
-                            <td class="d-flex ">
-                                <form action="{{route('employees.regenerate', $employee)}}" method="post">
+                            <td>{{ $attendance->employee->employeenumber }}</td>
+                            <td>{{ $attendance->employee->fullName() }}</td>
+                            <td>{{ $attendance->date }}</td>
+                            <td>{{ $attendance->time }}</td>
+                            <td>{{ $attendance->prettyStatus() }}</td>
+                             <td class="d-flex ">
+                                <form action="{{route('attendance.destroy', $attendance)}}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-link text-danger" onclick="return confirm('Employee will be delete, confirm?')" type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" style="height:26px" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                          </svg>
+                                    </button>
+                                </form>
+                            {{--    <form action="{{route('employees.regenerate', $employee)}}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-link text-primary" onclick="return confirm('Existing Qr Code will be lose, confirm?')">
@@ -64,16 +71,7 @@
                                           </svg>
                                     </a>
                                 </div>
-                            <form action="{{route('employees.destroy', $employee)}}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-link text-danger" onclick="return confirm('Employee will be delete, confirm?')" type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" style="height:26px" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                          </svg>
-                                    </button>
-                                </form>
+
 
                                 <form action="{{route('employees.reset', $employee)}}" method="post">
                                     @csrf
@@ -85,7 +83,7 @@
                                     </button>
                                 </form>
                             </td>
-                        </tr>
+                        </tr> --}}
                     @empty
                         <tr>
                             <td colspan="5" class="text-center">No data</td>
@@ -96,8 +94,14 @@
 
         </div>
 
-        <div class="card-footer">
-            {{ $employees->links() }}
-        </div>
     </div>
+    <script defer>
+        $(document).ready(function(){
+            console.log('sample')
+            $('#dTable').DataTable();
+        })
+        // $(document).ready( function () {
+        //     $('#dTable').DataTable();
+        // } );
+    </script>
 @endsection
