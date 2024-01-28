@@ -125,7 +125,15 @@ After all the steps are done, we can now finally run this command
 php artisan serve
 ```
 
-In the browser type this url
+In the browser type this url(s)
+
+For Admin
 ```
-localhost:8000
+localhost:8000/login
+```
+
+For employee
+
+```
+http://localhost:8000/employee/login
 ```
