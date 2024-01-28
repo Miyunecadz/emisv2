@@ -97,7 +97,7 @@ npm install
 ### Building the project assests
 Since all code are not yet compiled, to compile the code just run this command
 ```
-npm run build
+npm run dev
 ```
 
 ### Generating the project key
