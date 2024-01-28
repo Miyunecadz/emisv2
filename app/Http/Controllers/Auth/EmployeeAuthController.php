@@ -10,8 +10,7 @@ class EmployeeAuthController extends Controller
 {
     public function loginForm()
     {
-        if(Auth::guard('employee')->check())
-        {
+        if (Auth::guard('employee')->check()) {
             return redirect(route('employee.dashboard'));
         }
         return view('user_employee.login');
@@ -24,10 +23,9 @@ class EmployeeAuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        if(auth()->guard('employee')->attempt($credentials))
-        {
+        if (auth()->guard('employee')->attempt($credentials)) {
             $user = auth()->user();
-            return redirect()->intended(route('employee.dashboard'));
+            return redirect(route('employee.dashboard'));
         }
 
         return back()->withErrors([

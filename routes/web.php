@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\Auth\EmployeeAuthController;
-use App\Http\Controllers\EmployeeControlller;
-use App\Http\Controllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeControlller;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\EmployeeProfileController;
+use App\Http\Controllers\Auth\EmployeeAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function() {
+
+Route::get('/', function () {
     return redirect(route('home'));
 });
 
@@ -28,10 +29,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('users/create', [\App\Http\Controllers\UserController::class, 'create'])->name('users.create');
     Route::post('users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
-    Route::delete('users/{user}',[\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
     Route::put('users/{user}', [\App\Http\Controllers\UserController::class, 'reset'])->name('users.reset');
 
-    Route::get('employees',[EmployeeControlller::class, 'index'])->name('employees.index');
+    Route::get('employees', [EmployeeControlller::class, 'index'])->name('employees.index');
     Route::get('employees/create', [EmployeeControlller::class, 'create'])->name('employees.create');
     Route::post('employees', [EmployeeControlller::class, 'store'])->name('employees.store');
     // Route::get('employees/{employee}', [EmployeeControlller::class, 'show'])->name('employees.show');
@@ -53,8 +54,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 Route::get('employee/login', [EmployeeAuthController::class, 'loginForm'])->name('employee.loginForm');
 Route::post('employee/login', [EmployeeAuthController::class, 'login'])->name('employee.login');
 
-Route::middleware('employee')->prefix('employee')->group(function(){
-    Route::get('dashboard', function(){
+Route::middleware('employee')->prefix('employee')->group(function () {
+    Route::get('dashboard', function () {
         return view('user_employee.dashboard');
     })->name('employee.dashboard');
 
@@ -66,5 +67,3 @@ Route::middleware('employee')->prefix('employee')->group(function(){
 
     Route::post('employee/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
 });
-
-

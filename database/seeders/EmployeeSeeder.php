@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\Employee;
 use Illuminate\Database\Seeder;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeSeeder extends Seeder
 {
+    use WithFaker;
     /**
      * Run the database seeds.
      *
@@ -15,16 +17,6 @@ class EmployeeSeeder extends Seeder
      */
     public function run()
     {
-        Employee::create([
-            'qrcode' => '12345',
-            'employeenumber' => '123',
-            'firstname' => 'June Vic',
-            'lastname' => 'Cadayona',
-            'middlename' => 'Wales',
-            'email' => 'jvcadz@gmail.com',
-            'position' => 'parttime',
-            'username' => 'admin',
-            'password' => Hash::make(12345678)
-        ]);
+        Employee::factory()->create();
     }
 }
